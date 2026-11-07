@@ -1,0 +1,125 @@
+﻿
+@model Project
+
+@{
+    ViewData["Title"] = "Proje Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <div class="content-header-row">
+        <div>
+            <h2 class="page-title">Yeni Proje Ekle</h2>
+            <p class="page-subtitle">
+                Portfolyonuzda göstermek istediğiniz proje bilgilerini ekleyebilirsiniz.
+            </p>
+        </div>
+
+        <a href="/Admin/Project/ProjectList" class="btn-table-util">
+            <i class="bi bi-arrow-left me-2"></i>
+            Geri Dön
+        </a>
+    </div>
+
+    <div class="data-table-card">
+
+        <div class="mb-4">
+            <h5 class="fw-semibold mb-1">Proje Bilgileri</h5>
+            <small class="text-muted">
+                Lütfen proje bilgilerini doldurunuz.
+            </small>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ProjectTitle" class="form-label">Proje Başlığı</label>
+                    <input asp-for="ProjectTitle"
+                           class="form-control"
+                           placeholder="Örn: YBS.Atelier E-Ticaret Projesi" />
+                    <span asp-validation-for="ProjectTitle" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CategoryId" class="form-label">Proje Kategorisi</label>
+                    <select asp-for="CategoryId"
+                            asp-items="ViewBag.Categories"
+                            class="form-control">
+                        <option value="">Kategori Seçiniz</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label class="form-label">Proje Görseli</label>
+                    <input type="file"
+                           name="imageFile"
+                           class="form-control"
+                           accept=".jpg,.jpeg,.png,.webp"
+                           required />
+
+                    <small class="text-muted">
+                        JPG, JPEG, PNG veya WEBP. Maksimum 5 MB.
+                    </small>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="GithubUrl" class="form-label">GitHub Bağlantısı</label>
+                    <input asp-for="GithubUrl"
+                           class="form-control"
+                           placeholder="https://github.com/..." />
+                    <span asp-validation-for="GithubUrl" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label asp-for="Description" class="form-label">Proje Açıklaması</label>
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="5"
+                              placeholder="Projeniz hakkında kısa bir açıklama giriniz..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <label class="form-label d-block">Proje Durumu</label>
+
+                    <div class="form-check form-switch mt-2">
+                        <input asp-for="IsActive"
+                               class="form-check-input"
+                               type="checkbox" />
+                        <label asp-for="IsActive" class="form-check-label">
+                            Proje Aktif
+                        </label>
+                    </div>
+
+                    <small class="text-muted">
+                        Aktif projeler web sitenizin ziyaretçilere açık olan bölümünde görüntülenir.
+                    </small>
+                </div>
+
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
+                <a href="/Admin/Project/ProjectList" class="btn-table-util">
+                    İptal
+                </a>
+
+                <button type="submit" class="btn-pastel-primary">
+                    <i class="bi bi-check-lg me-2"></i>
+                    Projeyi Kaydet
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>

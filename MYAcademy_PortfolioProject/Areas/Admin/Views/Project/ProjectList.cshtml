@@ -1,0 +1,170 @@
+﻿@model List<Project>
+
+@{
+    ViewData["Title"] = "ProjectList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Projelerim</h1>
+            <p class="page-subtitle">
+                Portfolyo sitenizde yer alacak projeleri buradan yönetebilirsiniz.
+            </p>
+        </div>
+
+        <div class="header-actions">
+            <a href="/Admin/Project/CreateProject" class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Proje Ekle</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+
+        <div class="table-filter-bar">
+
+            <div class="filters-left-group">
+                <div class="filter-search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="tableSearchInput"
+                           placeholder="Proje adına göre ara...">
+                </div>
+            </div>
+
+            <div class="filters-right-group">
+                <button class="btn-table-util" id="btnRefreshTable">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <span class="d-none d-md-inline">Yenile</span>
+                </button>
+            </div>
+
+        </div>
+
+        <div class="table-responsive-wrapper">
+
+            <table class="custom-admin-table">
+
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>Proje</th>
+                        <th>Kategori</th>
+                        <th>Teknoloji Sayısı</th>
+                        <th>GitHub</th>
+                        <th style="text-align: right; width: 130px;">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td class="col-id">
+                                #@item.ProjectId.ToString("D2")
+                            </td>
+
+                            <td>
+                                <div class="experience-title-cell">
+
+                                    <div class="exp-icon-bullet">
+                                        <i class="bi bi-code-square"></i>
+                                    </div>
+
+                                    <div>
+                                        <span class="exp-title-text">
+                                            @item.ProjectTitle
+                                        </span>
+
+                                        <small class="text-muted d-block"
+                                               style="font-size: 0.75rem;">
+                                            @(item.Description.Length > 65
+                                                ? item.Description.Substring(0, 65) + "..."
+                                                : item.Description)
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="work-type-badge">
+                                    @item.Category?.CategoryName
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="order-badge">
+                                    @(item.ProjectTechnologies?.Count ?? 0)
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.GithubUrl))
+                                {
+                                    <a href="@item.GithubUrl"
+                                       target="_blank"
+                                       class="btn-table-util"
+                                       title="GitHub'da Görüntüle">
+                                        <i class="bi bi-github"></i>
+                                        GitHub
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Bağlantı yok</span>
+                                }
+                            </td>
+
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+
+                                    <a href="/Admin/Project/UpdateProject/@item.ProjectId"
+                                       class="btn-action-icon btn-edit"
+                                       title="Düzenle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <a href="/Admin/ProjectTechnology/ProjectTechnologyList?projectId=@item.ProjectId"
+                                       class="btn-action-icon btn-view"
+                                       title="Teknolojileri Yönet">
+                                        <i class="bi bi-stack"></i>
+                                    </a>
+
+                                    <form action="/Admin/Project/DeleteProject/@item.ProjectId"
+                                      method="post"
+                                      class="delete-form d-inline">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit" class="btn-action-icon btn-delete">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="table-footer-area">
+            <div class="pagination-counter">
+                Toplam <strong>@Model.Count</strong> proje kaydı bulunuyor.
+            </div>
+        </div>
+
+    </div>
+
+</main>

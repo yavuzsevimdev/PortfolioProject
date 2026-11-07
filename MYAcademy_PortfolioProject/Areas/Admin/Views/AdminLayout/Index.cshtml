@@ -1,0 +1,42 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+@await Component.InvokeAsync("_AdminLayoutHeadComponentPartial")
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<body>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Başarılı!',
+                text: '@Html.Raw(TempData["SuccessMessage"])',
+                confirmButtonText: 'Tamam'
+            });
+        </script>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Hata!',
+                text: '@Html.Raw(TempData["ErrorMessage"])',
+                confirmButtonText: 'Tamam'
+            });
+        </script>
+    }
+    <div class="admin-wrapper">
+        @await Component.InvokeAsync("_AdminLayoutSidebarComponentPartial")
+        <div class="admin-main">
+            @await Component.InvokeAsync("_AdminLayoutNavbarComponentPartial")
+            @RenderBody()
+        </div>
+    </div>
+    @await Component.InvokeAsync("_AdminLayoutScriptComponentPartial")
+</body>
+</html>

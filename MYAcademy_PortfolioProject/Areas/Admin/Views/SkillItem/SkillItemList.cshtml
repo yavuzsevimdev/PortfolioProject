@@ -1,0 +1,128 @@
+﻿
+@model List<SkillItem>
+
+@{
+    ViewData["Title"] = "Yetenek Teknolojileri";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Sayfa Başlığı -->
+    <div class="content-header-row mb-4">
+        <div>
+            <h4 class="page-title">Yetenek Teknolojileri</h4>
+            <p class="page-subtitle">
+                Seçili yetenek kategorisine bağlı teknolojileri yönetin.
+            </p>
+        </div>
+
+        <a href="/Admin/SkillItem/CreateSkillItem?skillId=@ViewBag.SkillId"
+           class="btn-pastel-primary text-decoration-none">
+            <i class="bi bi-plus-lg me-1"></i>
+            Yeni Teknoloji Ekle
+        </a>
+    </div>
+
+    <!-- Teknoloji Tablosu -->
+    <div class="data-table-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h6 class="fw-semibold mb-1">Teknoloji Listesi</h6>
+                <small class="text-muted">
+                    Toplam @(Model?.Count ?? 0) teknoloji bulunmaktadır.
+                </small>
+            </div>
+
+            <span class="status-pill status-active">
+                @(Model?.Count ?? 0) Teknoloji
+            </span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table custom-admin-table align-middle">
+
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">#</th>
+                        <th>Teknoloji Adı</th>
+                        <th class="text-center" style="width: 120px;">İşlem</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted fw-semibold">
+                                        @item.SkillItemId
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="bi bi-code-square text-primary"
+                                           style="font-size: 19px;"></i>
+
+                                        <span class="fw-semibold">
+                                            @item.SkillItemTitle
+                                        </span>
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <form action="/Admin/SkillItem/DeleteSkillItem/@item.SkillItemId"
+                                          method="post"
+                                          class="delete-form d-inline">
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn-action-icon btn-delete"
+                                                title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5">
+                                <i class="bi bi-code-slash text-muted"
+                                   style="font-size: 35px;"></i>
+
+                                <p class="text-muted mt-2 mb-1">
+                                    Bu yetenek kategorisine henüz teknoloji eklenmemiş.
+                                </p>
+
+                                <a href="/Admin/SkillItem/CreateSkillItem?skillId=@ViewBag.SkillId"
+                                   class="btn-pastel-primary mt-2 text-decoration-none">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    İlk Teknolojiyi Ekle
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+        <hr class="my-3" />
+
+        <div>
+            <a href="/Admin/Skill/SkillList"
+               class="btn-table-util text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>
+                Yetenek Listesine Dön
+            </a>
+        </div>
+
+    </div>
+</div>

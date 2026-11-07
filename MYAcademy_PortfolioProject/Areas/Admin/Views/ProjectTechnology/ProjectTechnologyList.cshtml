@@ -1,0 +1,128 @@
+﻿@model List<ProjectTechnology>
+
+@{
+    ViewData["Title"] = "ProjectTechnologyList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Proje Teknolojileri</h1>
+            <p class="page-subtitle">
+                <strong>@ViewBag.ProjectTitle</strong> projesinde kullanılan teknolojileri buradan yönetebilirsiniz.
+            </p>
+        </div>
+
+        <div class="header-actions">
+            <a href="/Admin/ProjectTechnology/CreateProjectTechnology?projectId=@ViewBag.ProjectId"
+               class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Teknoloji Ekle</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+
+        <div class="table-filter-bar">
+            <div>
+                <h5 class="mb-0">Kullanılan Teknolojiler</h5>
+                <small class="text-muted">
+                    Projeye ait teknoloji listesi.
+                </small>
+            </div>
+        </div>
+
+        <div class="table-responsive-wrapper">
+
+            <table class="custom-admin-table">
+
+                <thead>
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Teknoloji Adı</th>
+                        <th style="text-align: right; width: 100px;">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td class="col-id">
+                                    #@item.ProjectTechnologyId.ToString("D2")
+                                </td>
+
+                                <td>
+                                    <div class="experience-title-cell">
+
+                                        <div class="exp-icon-bullet">
+                                            <i class="bi bi-code-slash"></i>
+                                        </div>
+
+                                        <span class="exp-title-text">
+                                            @item.TechnologyName
+                                        </span>
+
+                                    </div>
+                                </td>
+
+                                <td style="text-align: right;">
+                                    <div class="row-actions-group justify-content-end">
+
+                                        <form method="post"
+                                              action="/Admin/ProjectTechnology/DeleteProjectTechnology/@item.ProjectTechnologyId"
+                                              onsubmit="return confirm('Bu teknolojiyi silmek istediğinize emin misiniz?');">
+
+                                            <button type="submit"
+                                                    class="btn-action-icon btn-delete"
+                                                    title="Sil">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-4">
+                                <i class="bi bi-info-circle me-2"></i>
+                                Bu projeye henüz teknoloji eklenmemiş.
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="table-footer-area">
+
+            <div class="pagination-counter">
+                Toplam <strong>@Model.Count</strong> teknoloji bulunuyor.
+            </div>
+
+            <a href="/Admin/Project/ProjectList" class="btn-table-util">
+                <i class="bi bi-arrow-left"></i>
+                Projelere Dön
+            </a>
+
+        </div>
+
+    </div>
+
+</main>

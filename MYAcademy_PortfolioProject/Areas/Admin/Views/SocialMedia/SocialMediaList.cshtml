@@ -1,0 +1,101 @@
+﻿@model List<SocialMedia>
+
+@{
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="content-header-row">
+    <div>
+        <h2 class="page-title">Sosyal Medya Hesapları</h2>
+        <p class="page-subtitle">Web sitenizin sosyal medya bağlantılarını buradan yönetebilirsiniz.</p>
+    </div>
+
+    <a href="/Admin/SocialMedia/CreateSocialMedia" class="btn-pastel-primary">
+        <i class="bi bi-plus-lg"></i>
+        Yeni Sosyal Medya Ekle
+    </a>
+</div>
+
+<div class="data-table-card">
+
+    <div class="p-3">
+        <h5 class="mb-1">Sosyal Medya Listesi</h5>
+        <p class="page-subtitle mb-0">
+            Toplam @Model.Count kayıt bulunmaktadır.
+        </p>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table custom-admin-table mb-0">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>PLATFORM</th>
+                    <th>İKON</th>
+                    <th>BAĞLANTI</th>
+                    <th>DÜZENLE</th>
+                    <th>SİL</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Any())
+                {
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.SocialMediaId</td>
+
+                            <td>
+                                <strong>@item.PlatformName</strong>
+                            </td>
+
+                            <td>
+                                <i class="@item.IconUrl" style="font-size: 20px;"></i>
+                                <span class="ms-2 text-muted">@item.IconUrl</span>
+                            </td>
+
+                            <td>
+                                <a href="@item.Url" target="_blank" rel="noopener noreferrer">
+                                    Bağlantıyı Görüntüle
+                                    <i class="bi bi-box-arrow-up-right ms-1"></i>
+                                </a>
+                            </td>
+
+                            <td>
+                                <a href="/Admin/SocialMedia/UpdateSocialMedia/@item.SocialMediaId"
+                                   class="btn-action-icon btn-edit"
+                                   title="Düzenle">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                            </td>
+
+                            <td>
+                                <form action="/Admin/SocialMedia/DeleteSocialMedia/@item.SocialMediaId"
+                                      method="post"
+                                      onsubmit="return confirm('Bu sosyal medya hesabını silmek istediğinize emin misiniz?');">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="submit"
+                                            class="btn-action-icon btn-delete"
+                                            title="Sil">
+                                        <i class="bi bi-trash3"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            Henüz sosyal medya hesabı eklenmemiş.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

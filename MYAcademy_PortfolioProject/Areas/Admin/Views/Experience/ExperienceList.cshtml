@@ -1,0 +1,171 @@
+﻿@model List<Experience>
+
+@{
+    ViewData["Title"] = "ExperienceList";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+
+    <!-- Sayfa Başlığı -->
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Deneyimlerim</h1>
+            <p class="page-subtitle">
+                Portfolyo sitenizde yer alacak deneyim içeriklerini buradan yönetebilirsiniz.
+            </p>
+        </div>
+
+        <div class="header-actions">
+            <a href="/Admin/Experience/CreateExperience" class="btn-pastel-primary">
+                <i class="bi bi-plus-circle-fill"></i>
+                <span>Yeni Deneyim Ekle</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Tablo Kartı -->
+    <div class="data-table-card">
+
+        <!-- Tablo Üst Alanı -->
+        <div class="table-filter-bar">
+
+            <div class="filters-left-group">
+                <div class="filter-search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="tableSearchInput"
+                           placeholder="Deneyim başlığına göre ara...">
+                </div>
+
+                <select class="filter-select" id="statusFilterSelect">
+                    <option value="all">Durum (Tümü)</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Pasif">Pasif</option>
+                </select>
+            </div>
+
+            <div class="filters-right-group">
+                <button class="btn-table-util" id="btnRefreshTable" title="Tabloyu Yenile">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <span class="d-none d-md-inline">Yenile</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Deneyim Tablosu -->
+        <div class="table-responsive-wrapper">
+
+            <table class="custom-admin-table" id="experienceTable">
+
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>Deneyim Başlığı</th>
+                        <th>Kurum / Şirket</th>
+                        <th>Kategori</th>
+                        <th>Açıklama</th>
+                        <th>Durum</th>
+                        <th style="text-align: right; width: 130px;">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody id="experienceTableBody">
+
+                    @foreach (var item in Model)
+                    {
+                        <tr data-status="@(item.IsActive ? "Aktif" : "Pasif")">
+
+                            <td class="col-id">
+                                #@item.ExperienceId.ToString("D2")
+                            </td>
+
+                            <td>
+                                <div class="experience-title-cell">
+
+                                    <div class="exp-icon-bullet">
+                                        <i class="bi bi-briefcase"></i>
+                                    </div>
+
+                                    <div>
+                                        <span class="exp-title-text">
+                                            @item.Title
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="company-cell">
+                                    <i class="bi bi-building company-badge-icon"></i>
+                                    <span>@item.CompanyName</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="work-type-badge">
+                                    @item.CategoryName
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="text-muted">
+                                    @item.Description
+                                </span>
+                            </td>
+
+                            <td>
+                                @if (item.IsActive)
+                                {
+                                    <span class="status-pill status-active">
+                                        Aktif
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="status-pill status-passive">
+                                        Pasif
+                                    </span>
+                                }
+                            </td>
+
+                            <td style="text-align: right;">
+                                <div class="row-actions-group justify-content-end">
+
+                                    <a href="/Admin/Experience/UpdateExperience/@item.ExperienceId"
+                                       class="btn-action-icon btn-edit"
+                                       title="Düzenle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+
+                                    <a href="/Admin/Experience/DeleteExperience/@item.ExperienceId"
+                                       class="btn-action-icon btn-delete"
+                                       title="Sil">
+                                        <i class="bi bi-trash3"></i>
+                                    </a>
+
+                                </div>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Tablo Alt Alanı -->
+        <div class="table-footer-area">
+
+            <div class="pagination-counter">
+                Toplam <strong>@Model.Count</strong> deneyim kaydı bulunuyor.
+            </div>
+
+        </div>
+
+    </div>
+
+</main>

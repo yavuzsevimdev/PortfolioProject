@@ -1,0 +1,79 @@
+﻿
+@model SkillItem
+
+@{
+    ViewData["Title"] = "Yeni Teknoloji Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Sayfa Başlığı -->
+    <div class="content-header-row mb-4">
+        <div>
+            <h4 class="page-title">Yeni Teknoloji Ekle</h4>
+            <p class="page-subtitle">
+                Seçili yetenek kategorisine yeni bir teknoloji ekleyin.
+            </p>
+        </div>
+
+        <a href="/Admin/SkillItem/SkillItemList?skillId=@ViewBag.SkillId"
+           class="btn-table-util text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i>
+            Listeye Dön
+        </a>
+    </div>
+
+    <!-- Form Kartı -->
+    <div class="data-table-card">
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="SkillId" value="@ViewBag.SkillId" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <h6 class="fw-semibold mb-3">
+                <i class="bi bi-code-square me-2"></i>
+                Teknoloji Bilgileri
+            </h6>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <label asp-for="SkillItemTitle" class="form-label">
+                        Teknoloji Adı
+                    </label>
+
+                    <input asp-for="SkillItemTitle"
+                           class="form-control"
+                           placeholder="Örn: ASP.NET Core" />
+
+                    <span asp-validation-for="SkillItemTitle"
+                          class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <a href="/Admin/SkillItem/SkillItemList?skillId=@ViewBag.SkillId"
+                   class="btn-table-util text-decoration-none">
+                    <i class="bi bi-x-lg me-1"></i>
+                    İptal
+                </a>
+
+                <button type="submit" class="btn-pastel-primary">
+                    <i class="bi bi-check-lg me-1"></i>
+                    Teknolojiyi Kaydet
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+</div>

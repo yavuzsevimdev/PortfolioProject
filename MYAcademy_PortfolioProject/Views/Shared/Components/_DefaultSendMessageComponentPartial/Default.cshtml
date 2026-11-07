@@ -1,0 +1,118 @@
+﻿
+@model MYAcademy_PortfolioProject.Entities.Message
+
+<div class="col-lg-7 ps-lg-5 reveal-on-scroll">
+    <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+
+        <form id="contactForm"
+              method="post"
+              action="/Default/SendMessage">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger small mb-3"></div>
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label asp-for="SenderName"
+                           class="form-label small fw-semibold">
+                        Adınız Soyadınız *
+                    </label>
+
+                    <input asp-for="SenderName"
+                           type="text"
+                           class="form-control form-control-custom"
+                           placeholder="Örn: Ahmet Yılmaz"
+                           required />
+
+                    <span asp-validation-for="SenderName"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="SenderEmail"
+                           class="form-label small fw-semibold">
+                        E-posta Adresiniz *
+                    </label>
+
+                    <input asp-for="SenderEmail"
+                           type="email"
+                           class="form-control form-control-custom"
+                           placeholder="ad@ornek.com"
+                           required />
+
+                    <span asp-validation-for="SenderEmail"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Subject"
+                           class="form-label small fw-semibold">
+                        Konu
+                    </label>
+
+                    <input asp-for="Subject"
+                           type="text"
+                           class="form-control form-control-custom"
+                           placeholder="Örn: Kurumsal .NET Eğitimi veya Danışmanlık" />
+
+                    <span asp-validation-for="Subject"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="MessageDetail"
+                           class="form-label small fw-semibold">
+                        Mesajınız *
+                    </label>
+
+                    <textarea asp-for="MessageDetail"
+                              class="form-control form-control-custom"
+                              rows="5"
+                              placeholder="Projeniz veya sorunuz hakkında detayları paylaşın..."
+                              required></textarea>
+
+                    <span asp-validation-for="MessageDetail"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="col-12 pt-2">
+
+                    <button type="submit"
+                            class="btn-sage w-100 justify-content-center py-3 fs-6">
+
+                        <i class="bi bi-send-fill"></i>
+                        <span>Mesajımı Gönder</span>
+
+                    </button>
+
+                    @if (TempData["MessageSuccess"] != null)
+                    {
+                        <div class="alert alert-success mt-3 mb-0">
+                            @TempData["MessageSuccess"]
+                        </div>
+                    }
+
+                    @if (TempData["MessageError"] != null)
+                    {
+                        <div class="alert alert-danger mt-3 mb-0">
+                            @TempData["MessageError"]
+                        </div>
+                    }
+
+                    <div class="text-muted text-center small mt-3"
+                         style="font-size: 0.78rem;">
+
+                        <i class="bi bi-shield-check me-1"></i>
+                        Gönderilen bilgiler gizlilik ilkeleri doğrultusunda korunmaktadır.
+
+                    </div>
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+﻿
+@model Category
+
+@{
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    ViewData["Title"] = "Yeni Kategori";
+}
+
+<div class="container-fluid">
+
+    <div class="content-header-row">
+        <div>
+            <h2 class="page-title">Yeni Kategori Ekle</h2>
+            <p class="page-subtitle">
+                Projeleriniz için yeni bir kategori oluşturun.
+            </p>
+        </div>
+
+        <a href="/Admin/Category/Index" class="btn-table-util text-decoration-none">
+            <i class="bi bi-arrow-left me-2"></i>
+            Geri Dön
+        </a>
+    </div>
+
+    <div class="data-table-card">
+
+        <div class="mb-4">
+            <h5 class="fw-semibold mb-1">Kategori Bilgileri</h5>
+            <small class="text-muted">
+                Yeni kategori için gerekli bilgileri giriniz.
+            </small>
+        </div>
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="mb-4">
+                <label asp-for="CategoryName" class="form-label">
+                    Kategori Adı
+                </label>
+
+                <input asp-for="CategoryName"
+                       class="form-control"
+                       placeholder="Örn: Web Uygulamaları" />
+
+                <span asp-validation-for="CategoryName"
+                      class="text-danger small"></span>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+
+                <a href="/Admin/Category/Index"
+                   class="btn-table-util text-decoration-none">
+                    İptal
+                </a>
+
+                <button type="submit" class="btn-pastel-primary">
+                    <i class="bi bi-check-lg me-2"></i>
+                    Kategoriyi Kaydet
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>

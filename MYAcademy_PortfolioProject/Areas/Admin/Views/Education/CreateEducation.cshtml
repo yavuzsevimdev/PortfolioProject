@@ -1,0 +1,198 @@
+﻿
+@model MYAcademy_PortfolioProject.Entities.Education
+
+@{
+    ViewData["Title"] = "Yeni Eğitim Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="content-header-row">
+        <div>
+            <h2 class="page-title">Yeni Eğitim Ekle</h2>
+            <p class="page-subtitle">
+                Portfolyonuza yeni bir eğitim bilgisi ekleyebilirsiniz.
+            </p>
+        </div>
+
+        <a href="/Admin/Education/EducationList" class="btn-table-util">
+            <i class="bi bi-arrow-left me-1"></i>
+            Eğitim Listesine Dön
+        </a>
+    </div>
+
+    <!-- Create Form -->
+    <div class="data-table-card">
+
+        <div class="mb-4">
+            <h5 class="fw-semibold mb-1">Eğitim Bilgileri</h5>
+            <small class="text-muted">
+                Lütfen eğitim bilgilerini eksiksiz doldurunuz.
+            </small>
+        </div>
+
+        <form method="post" action="/Admin/Education/CreateEducation">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <div class="row g-4">
+
+                <!-- Degree -->
+                <div class="col-md-6">
+
+                    <label asp-for="Degree" class="form-label fw-semibold">
+                        Eğitim Derecesi
+                    </label>
+
+                    <input asp-for="Degree"
+                           class="form-control"
+                           placeholder="Örn: Yüksek Lisans" />
+
+                    <span asp-validation-for="Degree"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+                <!-- Department -->
+                <div class="col-md-6">
+
+                    <label asp-for="Department" class="form-label fw-semibold">
+                        Bölüm / Program
+                    </label>
+
+                    <input asp-for="Department"
+                           class="form-control"
+                           placeholder="Örn: İnternet ve Bilişim Teknolojileri Yönetimi" />
+
+                    <span asp-validation-for="Department"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+                <!-- Institution -->
+                <div class="col-md-6">
+
+                    <label asp-for="Institution" class="form-label fw-semibold">
+                        Eğitim Kurumu
+                    </label>
+
+                    <input asp-for="Institution"
+                           class="form-control"
+                           placeholder="Örn: Anadolu Üniversitesi" />
+
+                    <span asp-validation-for="Institution"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+                <!-- Badge -->
+                <div class="col-md-6">
+
+                    <label asp-for="BadgeText" class="form-label fw-semibold">
+                        Eğitim Etiketi
+                    </label>
+
+                    <input asp-for="BadgeText"
+                           class="form-control"
+                           placeholder="Örn: Akademik / Mezuniyet" />
+
+                    <span asp-validation-for="BadgeText"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+                <!-- Description -->
+                <div class="col-12">
+
+                    <label asp-for="Description" class="form-label fw-semibold">
+                        Açıklama
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"
+                              placeholder="Eğitim süreciniz ve edindiğiniz yetkinlikler hakkında bilgi giriniz."></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger small">
+                    </span>
+
+                </div>
+
+                <!-- Display Order -->
+                <div class="col-md-6">
+
+                    <label asp-for="DisplayOrder" class="form-label fw-semibold">
+                        Görüntülenme Sırası
+                    </label>
+
+                    <input asp-for="DisplayOrder"
+                           type="number"
+                           min="0"
+                           class="form-control"
+                           placeholder="Örn: 1" />
+
+                    <span asp-validation-for="DisplayOrder"
+                          class="text-danger small">
+                    </span>
+
+                    <small class="text-muted">
+                        Küçük değerler daha önce görüntülenir.
+                    </small>
+
+                </div>
+
+                <!-- IsActive -->
+                <div class="col-md-6">
+
+                    <label class="form-label fw-semibold d-block">
+                        Yayın Durumu
+                    </label>
+
+                    <div class="form-check form-switch mt-2">
+
+                        <input asp-for="IsActive"
+                               class="form-check-input"
+                               type="checkbox"
+                               role="switch" />
+
+                        <label asp-for="IsActive" class="form-check-label">
+                            Aktif olarak yayınla
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+
+                <a href="/Admin/Education/EducationList"
+                   class="btn-table-util">
+                    İptal
+                </a>
+
+                <button type="submit" class="btn-pastel-primary">
+                    <i class="bi bi-check-lg me-1"></i>
+                    Eğitimi Kaydet
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

@@ -1,0 +1,190 @@
+﻿
+@model About
+
+@{
+    ViewData["Title"] = "Hakkımda Bilgisi Ekle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="content-header-row">
+    <div>
+        <h2 class="page-title">Hakkımda Bilgisi Ekle</h2>
+        <p class="page-subtitle">
+            Profil bilgilerinizi ve hakkımda bölümünüzün içeriğini oluşturun.
+        </p>
+    </div>
+
+    <a href="/Admin/About/Index" class="btn-table-util">
+        <i class="bi bi-arrow-left"></i>
+        Listeye Dön
+    </a>
+</div>
+
+<form method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+    <!-- Kişisel Bilgiler -->
+    <div class="data-table-card mb-4">
+        <div class="p-4">
+            <h5 class="mb-1">Kişisel Bilgiler</h5>
+            <p class="text-muted mb-4">
+                Profilinizde gösterilecek temel bilgileri giriniz.
+            </p>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FullName" class="form-label">Ad Soyad</label>
+                    <input asp-for="FullName" class="form-control"
+                           placeholder="Ad soyad giriniz" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Profession" class="form-label">Meslek</label>
+                    <input asp-for="Profession" class="form-control"
+                           placeholder="Örn: Senior Developer" />
+                    <span asp-validation-for="Profession" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Location" class="form-label">Konum</label>
+                    <input asp-for="Location" class="form-control"
+                           placeholder="Örn: İstanbul" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Title" class="form-label">Başlık</label>
+                    <input asp-for="Title" class="form-control"
+                           placeholder="Hakkımda başlığı" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profil İçeriği -->
+    <div class="data-table-card mb-4">
+        <div class="p-4">
+            <h5 class="mb-1">Profil İçeriği</h5>
+            <p class="text-muted mb-4">
+                Hakkınızda bölümünde görüntülenecek açıklamayı ve profil görselini ekleyiniz.
+            </p>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Açıklama</label>
+                <textarea asp-for="Description" class="form-control" rows="5"
+                          placeholder="Hakkımda açıklamasını giriniz"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label">Profil Görseli URL</label>
+                <input asp-for="ImageUrl" class="form-control"
+                       placeholder="Görsel adresini giriniz" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bağlantılar -->
+    <div class="data-table-card mb-4">
+        <div class="p-4">
+            <h5 class="mb-1">Bağlantılar</h5>
+            <p class="text-muted mb-4">
+                CV dosyanızın bağlantısını ekleyebilirsiniz.
+            </p>
+
+            <div class="mb-3">
+                <label asp-for="CvUrl" class="form-label">CV URL</label>
+                <input asp-for="CvUrl" class="form-control"
+                       placeholder="CV dosya adresini giriniz" />
+                <span asp-validation-for="CvUrl" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- İstatistik Bilgileri -->
+    <div class="data-table-card mb-4">
+        <div class="p-4">
+            <h5 class="mb-1">İstatistik Bilgileri</h5>
+            <p class="text-muted mb-4">
+                Profilinizde öne çıkarmak istediğiniz üç istatistiği tanımlayınız.
+            </p>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StatisticValue1" class="form-label">
+                        1. İstatistik Değeri
+                    </label>
+                    <input asp-for="StatisticValue1" class="form-control"
+                           placeholder="Örn: 10+" />
+                    <span asp-validation-for="StatisticValue1" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StatisticTitle1" class="form-label">
+                        1. İstatistik Başlığı
+                    </label>
+                    <input asp-for="StatisticTitle1" class="form-control"
+                           placeholder="Örn: Yıl Deneyim" />
+                    <span asp-validation-for="StatisticTitle1" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StatisticValue2" class="form-label">
+                        2. İstatistik Değeri
+                    </label>
+                    <input asp-for="StatisticValue2" class="form-control"
+                           placeholder="Örn: 25+" />
+                    <span asp-validation-for="StatisticValue2" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StatisticTitle2" class="form-label">
+                        2. İstatistik Başlığı
+                    </label>
+                    <input asp-for="StatisticTitle2" class="form-control"
+                           placeholder="Örn: Eğitim İçeriği" />
+                    <span asp-validation-for="StatisticTitle2" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StatisticValue3" class="form-label">
+                        3. İstatistik Değeri
+                    </label>
+                    <input asp-for="StatisticValue3" class="form-control"
+                           placeholder="Örn: 200K+" />
+                    <span asp-validation-for="StatisticValue3" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StatisticTitle3" class="form-label">
+                        3. İstatistik Başlığı
+                    </label>
+                    <input asp-for="StatisticTitle3" class="form-control"
+                           placeholder="Örn: Öğrenci" />
+                    <span asp-validation-for="StatisticTitle3" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Form İşlemleri -->
+    <div class="d-flex justify-content-end gap-2 mb-4">
+        <a href="/Admin/About/Index" class="btn-table-util">
+            İptal
+        </a>
+
+        <button type="submit" class="btn-pastel-primary">
+            <i class="bi bi-check-lg"></i>
+            Kaydet
+        </button>
+    </div>
+
+</form>

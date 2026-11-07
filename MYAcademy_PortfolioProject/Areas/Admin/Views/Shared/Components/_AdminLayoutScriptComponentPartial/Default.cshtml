@@ -1,0 +1,274 @@
+﻿  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<!-- Vanilla JavaScript Interactions -->
+<script>
+  // Mobile Sidebar Toggle
+  const sidebar = document.getElementById('adminSidebar');
+  const sidebarToggle = document.getElementById('sidebarToggle');
+
+  sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('show-sidebar');
+  });
+
+  // Close sidebar when clicking outside on mobile
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 991.98) {
+      if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+        sidebar.classList.remove('show-sidebar');
+      }
+    }
+  });
+
+  // Select All Checkbox Handler
+  const selectAll = document.getElementById('selectAllCheckbox');
+  const rowCheckboxes = document.querySelectorAll('.row-select-checkbox');
+
+  selectAll.addEventListener('change', () => {
+    rowCheckboxes.forEach(cb => {
+      cb.checked = selectAll.checked;
+    });
+  });
+
+  // Search Filter Table
+  const searchInput = document.getElementById('tableSearchInput');
+  const statusFilter = document.getElementById('statusFilterSelect');
+  const tableRows = document.querySelectorAll('#experienceTableBody tr');
+
+  function filterTable() {
+    const query = searchInput.value.toLowerCase().trim();
+    const statusVal = statusFilter.value;
+
+    tableRows.forEach(row => {
+      const title = row.querySelector('.exp-title-text').innerText.toLowerCase();
+      const company = row.querySelector('.company-cell span').innerText.toLowerCase();
+      const status = row.getAttribute('data-status');
+
+      const matchesQuery = title.includes(query) || company.includes(query);
+      const matchesStatus = (statusVal === 'all') || (status === statusVal);
+
+      if (matchesQuery && matchesStatus) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+
+  searchInput.addEventListener('input', filterTable);
+  statusFilter.addEventListener('change', filterTable);
+
+  // Sorting
+  const sortSelect = document.getElementById('sortSelect');
+  sortSelect.addEventListener('change', () => {
+    const tbody = document.getElementById('experienceTableBody');
+    const rows = Array.from(tableRows);
+
+    if (sortSelect.value === 'order-asc') {
+      rows.sort((a, b) => parseInt(a.dataset.order) - parseInt(b.dataset.order));
+    } else if (sortSelect.value === 'order-desc') {
+      rows.sort((a, b) => parseInt(b.dataset.order) - parseInt(a.dataset.order));
+    } else if (sortSelect.value === 'title-asc') {
+      rows.sort((a, b) => {
+        const titleA = a.querySelector('.exp-title-text').innerText;
+        const titleB = b.querySelector('.exp-title-text').innerText;
+        return titleA.localeCompare(titleB, 'tr');
+      });
+    }
+
+    rows.forEach(r => tbody.appendChild(r));
+    showToast('Sıralama Güncellendi', 'Deneyimler seçilen kritere göre dizildi.');
+  });
+
+  // Modal Handlers
+  const modal = document.getElementById('experienceModal');
+  function openAddModal() {
+    document.getElementById('modalTitle').innerText = 'Yeni Deneyim Ekle';
+    document.getElementById('modalInputTitle').value = '';
+    document.getElementById('modalInputCompany').value = '';
+    document.getElementById('modalInputStartDate').value = '';
+    document.getElementById('modalInputEndDate').value = '';
+    modal.classList.add('show');
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+  }
+
+  function handleModalSubmit(e) {
+    e.preventDefault();
+    closeModal();
+    showToast('Kayıt Eklendi', 'Yeni deneyim kaydı başarıyla oluşturuldu.');
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    showToast('Kaydedildi', 'Deneyim kaydı portfolyo veritabanına aktarıldı.');
+  }
+
+  // Toast Functionality
+  function showToast(title, message) {
+    const toast = document.getElementById('actionToast');
+    document.getElementById('toastTitle').innerText = title;
+    document.getElementById('toastMsg').innerText = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3200);
+  }
+
+  // CRUD Actions
+  function viewRecord(id) {
+    showToast('Önizleme', '#' + id + ' numaralı deneyim detayları görüntülendi.');
+  }
+
+  function editRecord(id) {
+    document.getElementById('modalTitle').innerText = 'Deneyimi Düzenle (ID: #' + id + ')';
+    if(id === 1) {
+      document.getElementById('modalInputTitle').value = 'Kıdemli Frontend Geliştirici';
+      document.getElementById('modalInputCompany').value = 'Nova Digital Studio';
+      document.getElementById('modalInputStartDate').value = 'Ocak 2022';
+      document.getElementById('modalInputEndDate').value = 'Devam Ediyor';
+    }
+    modal.classList.add('show');
+  }
+
+  function deleteRecord(id) {
+    if (confirm('#0' + id + ' numaralı kaydı silmek istediğinize emin misiniz?')) {
+      const row = document.querySelector(`tr[data-id="${id}"]`);
+      if (row) {
+        row.style.opacity = '0';
+        setTimeout(() => {
+          row.remove();
+          showToast('Kayıt Silindi', 'Deneyim kaydı başarıyla kaldırıldı.');
+        }, 200);
+      }
+    }
+  }
+
+  // Helper checkbox toggle
+  function toggleOngoingDate(cb) {
+    const endInput = document.getElementById('endDateInput');
+    if (cb.checked) {
+      endInput.value = 'Devam Ediyor';
+      endInput.disabled = true;
+    } else {
+      endInput.value = '';
+      endInput.disabled = false;
+    }
+  }
+
+  // Buttons quick listeners
+  document.getElementById('btnRefreshTable').addEventListener('click', () => {
+    searchInput.value = '';
+    statusFilter.value = 'all';
+    filterTable();
+    showToast('Yenilendi', 'Tablo verileri tazelendi.');
+  });
+
+  document.getElementById('btnExport').addEventListener('click', () => {
+    showToast('Dışa Aktarma', 'Deneyim kayıtları CSV/Excel formatında hazırlandı.');
+  });
+
+  document.getElementById('btnLogout').addEventListener('click', () => {
+    if (confirm('Yönetim panelinden çıkış yapmak istiyor musunuz?')) {
+      showToast('Oturum Kapatılıyor', 'Giriş ekranına yönlendiriliyorsunuz...');
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+
+    document.querySelectorAll(".delete-form").forEach(form => {
+
+        form.addEventListener("submit", function (e) {
+
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Emin misiniz?',
+                text: 'Bu kayıt kalıcı olarak silinecektir.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Evet, sil!',
+                cancelButtonText: 'Vazgeç'
+            }).then((result) => {
+
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+
+async function openMessage(id) {
+
+    // Modal elemanlarını al
+    const modalElement = document.getElementById("messageDetailModal");
+
+    const loading = document.getElementById("messageLoading");
+    const content = document.getElementById("messageContent");
+    const error = document.getElementById("messageError");
+
+    // Modalı aç
+    const modal = new bootstrap.Modal(modalElement);
+    modal.show();
+
+    // Yükleniyor ekranını göster
+    loading.style.display = "block";
+    content.style.display = "none";
+    error.classList.add("d-none");
+
+    try {
+
+        // Controller metoduna AJAX isteği gönder
+        const response = await fetch(`/Admin/Message/GetMessageDetail?id=${id}`);
+
+        if (!response.ok) {
+            throw new Error("Mesaj yüklenemedi.");
+        }
+
+        const message = await response.json();
+
+        // Modal bilgilerini doldur
+        document.getElementById("modalSenderName").textContent = message.senderName;
+        document.getElementById("modalSenderEmail").textContent = message.senderEmail;
+        document.getElementById("modalSubject").textContent =
+            message.subject || "Konu belirtilmedi";
+
+        document.getElementById("modalSendDate").textContent =
+            new Date(message.sendDate).toLocaleString("tr-TR");
+
+        document.getElementById("modalMessageDetail").textContent =
+            message.messageDetail;
+
+        // Yükleniyor ekranını gizle
+        loading.style.display = "none";
+        content.style.display = "block";
+
+        // Tablo üzerindeki mesaj durumunu güncelle
+        const statusBadge = document.getElementById(`messageStatus-${id}`);
+
+        if (statusBadge) {
+            statusBadge.className = "badge rounded-pill bg-success-subtle text-success";
+            statusBadge.textContent = "Okundu";
+        }
+
+    }
+    catch (errorMessage) {
+
+        loading.style.display = "none";
+        error.classList.remove("d-none");
+
+        console.error(errorMessage);
+    }
+}
+
+</script>

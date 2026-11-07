@@ -1,0 +1,334 @@
+﻿
+@model List<MYAcademy_PortfolioProject.Entities.Message>
+
+@{
+    ViewData["Title"] = "Gelen Mesajlar";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Page Header -->
+    <div class="content-header-row">
+        <div>
+            <h2 class="page-title">Gelen Mesajlar</h2>
+            <p class="page-subtitle">
+                İletişim formu üzerinden gönderilen mesajları görüntüleyebilir ve yönetebilirsiniz.
+            </p>
+        </div>
+    </div>
+
+    <!-- Message List -->
+    <div class="data-table-card">
+
+        <!-- Card Header -->
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
+            <div>
+                <h5 class="fw-semibold mb-1">Mesaj Listesi</h5>
+                <small class="text-muted">
+                    Mesajlar en yeniden eskiye doğru sıralanmaktadır.
+                </small>
+            </div>
+
+            <span class="badge rounded-pill bg-light text-dark px-3 py-2">
+                Toplam @(Model?.Count ?? 0) Mesaj
+            </span>
+
+        </div>
+
+        <!-- Search -->
+        <form method="get" action="/Admin/Message/MessageList" class="mb-4">
+
+            <div class="row g-2">
+
+                <div class="col-md-6 col-lg-5">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="bi bi-search"></i>
+                        </span>
+
+                        <input type="text"
+                               name="searchQuery"
+                               value="@ViewBag.SearchQuery"
+                               class="form-control"
+                               placeholder="Gönderen veya konuya göre ara..." />
+                    </div>
+                </div>
+
+                <div class="col-auto">
+                    <button type="submit" class="btn-pastel-primary">
+                        <i class="bi bi-search me-1"></i>
+                        Ara
+                    </button>
+                </div>
+
+                @if (!string.IsNullOrWhiteSpace(ViewBag.SearchQuery as string))
+                {
+                    <div class="col-auto">
+                        <a href="/Admin/Message/MessageList" class="btn-table-util">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Temizle
+                        </a>
+                    </div>
+                }
+
+            </div>
+
+        </form>
+
+        <!-- Table -->
+        <div class="table-responsive">
+
+            <table class="table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Gönderen</th>
+                        <th>Konu</th>
+                        <th>Gönderim Tarihi</th>
+                        <th>Durum</th>
+                        <th class="text-center">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="text-muted">
+                                        #@item.MessageId
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="fw-semibold">
+                                        @item.SenderName
+                                    </div>
+
+                                    <small class="text-muted">
+                                        @item.SenderEmail
+                                    </small>
+                                </td>
+
+                                <td>
+                                    @if (!string.IsNullOrWhiteSpace(item.Subject))
+                                    {
+                                        <span>@item.Subject</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Konu belirtilmedi</span>
+                                    }
+                                </td>
+
+                                <td>
+                                    <span class="text-muted">
+                                        @item.SendDate.ToString("dd.MM.yyyy HH:mm")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span id="messageStatus-@item.MessageId"
+                                          class="badge rounded-pill @(item.IsRead ? "bg-success-subtle text-success" : "bg-warning-subtle text-warning")">
+                                        @(item.IsRead ? "Okundu" : "Okunmadı")
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <!-- Mesaj Detayı -->
+                                        <button type="button"
+                                                class="btn-table-util"
+                                                onclick="openMessage(@item.MessageId)"
+                                                title="Mesajı Görüntüle">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+
+                                        <!-- Sil -->
+                                         <form method="post"
+                                          action="/Admin/Message/DeleteMessage"
+                                          onsubmit="return confirm('Bu mesajı silmek istediğinize emin misiniz?');">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.MessageId" />
+
+                                        <button type="submit"
+                                                class="btn-table-util"
+                                                title="Mesajı Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+
+                                    </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5">
+
+                                <i class="bi bi-inbox text-muted"
+                                   style="font-size: 38px;"></i>
+
+                                <h6 class="mt-3 mb-1">
+                                    Mesaj bulunamadı
+                                </h6>
+
+                                <p class="text-muted small mb-0">
+                                    Arama kriterlerinize uygun bir mesaj bulunmuyor.
+                                </p>
+
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Message Detail Modal -->
+<div class="modal fade"
+     id="messageDetailModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content border-0 rounded-4 shadow">
+
+            <!-- Modal Header -->
+            <div class="modal-header border-bottom">
+
+                <div>
+                    <h5 class="modal-title fw-semibold">
+                        Mesaj Detayı
+                    </h5>
+
+                    <small class="text-muted">
+                        Gelen mesaj bilgileri
+                    </small>
+                </div>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Kapat">
+                </button>
+
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4">
+
+                <!-- Loading -->
+                <div id="messageLoading" class="text-center py-5">
+
+                    <div class="spinner-border text-secondary"></div>
+
+                    <p class="text-muted mt-2 mb-0">
+                        Mesaj yükleniyor...
+                    </p>
+
+                </div>
+
+                <!-- Message Content -->
+                <div id="messageContent" style="display:none;">
+
+                    <div class="row g-3 mb-4">
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block mb-1">
+                                Gönderen
+                            </small>
+
+                            <strong id="modalSenderName"></strong>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block mb-1">
+                                E-posta
+                            </small>
+
+                            <span id="modalSenderEmail"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block mb-1">
+                                Konu
+                            </small>
+
+                            <span id="modalSubject"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <small class="text-muted d-block mb-1">
+                                Gönderim Tarihi
+                            </small>
+
+                            <span id="modalSendDate"></span>
+                        </div>
+
+                    </div>
+
+                    <!-- Message Detail -->
+                    <div class="border rounded-3 p-3">
+
+                        <h6 class="fw-semibold mb-3">
+                            Mesaj İçeriği
+                        </h6>
+
+                        <p id="modalMessageDetail"
+                           class="mb-0"
+                           style="white-space: pre-wrap; overflow-wrap: anywhere;">
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <!-- Error -->
+                <div id="messageError"
+                     class="alert alert-danger d-none mb-0">
+                    Mesaj yüklenirken bir hata oluştu.
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer border-top">
+
+                <button type="button"
+                        class="btn-pastel-primary"
+                        data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>
+                    Kapat
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

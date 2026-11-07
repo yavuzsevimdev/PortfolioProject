@@ -1,0 +1,104 @@
+﻿
+@model List<Contact>
+
+@{
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+    ViewData["Title"] = "İletişim Bilgileri";
+}
+
+<div class="container-fluid">
+
+    <div class="content-header-row">
+        <div>
+            <h2 class="page-title">İletişim Bilgileri</h2>
+            <p class="page-subtitle">Web sitenizin iletişim alanını buradan yönetebilirsiniz.</p>
+        </div>
+
+        <a href="/Admin/Contact/CreateContact" class="btn-pastel-primary">
+            <i class="bi bi-plus-lg me-2"></i>
+            Yeni İletişim Bilgisi Ekle
+        </a>
+    </div>
+
+    <div class="data-table-card">
+
+        <div class="mb-3">
+            <h5 class="fw-semibold mb-1">İletişim Listesi</h5>
+            <small class="text-muted">
+                Toplam @Model.Count kayıt bulunmaktadır.
+            </small>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table custom-admin-table align-middle">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Başlık</th>
+                        <th>E-posta</th>
+                        <th>Telefon</th>
+                        <th>Konum</th>
+                        <th class="text-center">Düzenle</th>
+                        <th class="text-center">Sil</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.ContactId</td>
+
+                                <td>
+                                    <span class="fw-semibold">@item.Title</span>
+                                </td>
+
+                                <td>@item.Email</td>
+
+                                <td>@item.PhoneNumber</td>
+
+                                <td>@item.Location</td>
+
+                                <td class="text-center">
+                                    <a href="/Admin/Contact/UpdateContact/@item.ContactId"
+                                       class="btn-action-icon btn-edit"
+                                       title="Düzenle">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                </td>
+
+                                <td class="text-center">
+                                    <form method="post"
+                                          action="/Admin/Contact/DeleteContact/@item.ContactId"
+                                          class="delete-form">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <button type="submit"
+                                                class="btn-action-icon btn-delete"
+                                                title="Sil">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-4 text-muted">
+                                Henüz iletişim bilgisi eklenmemiş.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,173 @@
+﻿
+@model Skill
+
+@{
+    ViewData["Title"] = "Yetenek Bilgilerini Güncelle";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Sayfa Başlığı -->
+    <div class="content-header-row mb-4">
+        <div>
+            <h4 class="page-title">Yetenek Bilgilerini Güncelle</h4>
+            <p class="page-subtitle">
+                Yetenek kategorisinin bilgilerini ve mevcut teknolojilerini yönetin.
+            </p>
+        </div>
+
+        <a href="/Admin/Skill/SkillList" class="btn-table-util text-decoration-none">
+            <i class="bi bi-arrow-left me-1"></i>
+            Listeye Dön
+        </a>
+    </div>
+
+    <!-- Güncelleme Formu -->
+    <div class="data-table-card">
+
+        <form method="post">
+            @Html.AntiForgeryToken()
+
+            <input type="hidden" asp-for="SkillId" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <h6 class="fw-semibold mb-3">
+                <i class="bi bi-pencil-square me-2"></i>
+                Yetenek Bilgileri
+            </h6>
+
+            <div class="row g-4">
+
+                <div class="col-md-6">
+                    <label asp-for="Title" class="form-label">
+                        Yetenek Başlığı
+                    </label>
+
+                    <input asp-for="Title" class="form-control" />
+
+                    <span asp-validation-for="Title"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="IconUrl" class="form-label">
+                        İkon Sınıfı
+                    </label>
+
+                    <input asp-for="IconUrl" class="form-control" />
+
+                    <span asp-validation-for="IconUrl"
+                          class="text-danger"></span>
+
+                    <small class="text-muted">
+                        Bootstrap Icons sınıfını giriniz.
+                    </small>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label">
+                        Açıklama
+                    </label>
+
+                    <textarea asp-for="Description"
+                              class="form-control"
+                              rows="4"></textarea>
+
+                    <span asp-validation-for="Description"
+                          class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <hr class="my-4" />
+
+            <!-- Mevcut Teknolojiler -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+
+                <div>
+                    <h6 class="fw-semibold mb-1">
+                        <i class="bi bi-code-slash me-2"></i>
+                        Mevcut Teknolojiler
+                    </h6>
+
+                    <small class="text-muted">
+                        Bu yetenek kategorisine bağlı teknolojiler.
+                    </small>
+                </div>
+
+                <span class="status-pill status-active">
+                    @(Model.SkillItems?.Count ?? 0) Teknoloji
+                </span>
+
+            </div>
+
+            @if (Model.SkillItems != null && Model.SkillItems.Any())
+            {
+                <div class="row g-3">
+
+                    @foreach (var item in Model.SkillItems)
+                    {
+                        <div class="col-md-4 col-lg-3">
+                            <div class="d-flex align-items-center gap-2 p-3 rounded"
+                                 style="background-color: #f7f8fc; border: 1px solid #edf0f5;">
+
+                                <i class="bi bi-check-circle-fill text-success"></i>
+
+                                <span class="fw-medium">
+                                    @item.SkillItemTitle
+                                </span>
+
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4 rounded"
+                     style="background-color: #f7f8fc;">
+
+                    <i class="bi bi-code-slash text-muted"
+                       style="font-size: 30px;"></i>
+
+                    <p class="text-muted mt-2 mb-0">
+                        Bu yetenek kategorisine henüz teknoloji eklenmemiş.
+                    </p>
+
+                </div>
+            }
+
+            <hr class="my-4" />
+
+            <!-- Form Butonları -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                <a href="/Admin/Skill/SkillList"
+                   class="btn-table-util text-decoration-none">
+                    <i class="bi bi-x-lg me-1"></i>
+                    İptal
+                </a>
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    <a href="/Admin/SkillItem/SkillItemList?skillId=@Model.SkillId"
+                       class="btn-table-util text-decoration-none">
+                        <i class="bi bi-gear me-1"></i>
+                        Teknolojileri Yönet
+                    </a>
+
+                    <button type="submit" class="btn-pastel-primary">
+                        <i class="bi bi-check-lg me-1"></i>
+                        Değişiklikleri Kaydet
+                    </button>
+
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

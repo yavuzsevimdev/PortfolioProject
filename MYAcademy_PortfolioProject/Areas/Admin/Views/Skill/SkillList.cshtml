@@ -1,0 +1,153 @@
+﻿
+@model List<Skill>
+
+@{
+    ViewData["Title"] = "Yeteneklerim";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<div class="container-fluid">
+
+    <!-- Sayfa Başlığı -->
+    <div class="content-header-row mb-4">
+        <div>
+            <h4 class="page-title">Yeteneklerim</h4>
+            <p class="page-subtitle">
+                Yetenek kategorilerinizi ve bu kategorilere bağlı teknolojileri yönetin.
+            </p>
+        </div>
+
+        <div>
+            <a href="/Admin/Skill/CreateSkill" class="btn-pastel-primary">
+                <i class="bi bi-plus-lg me-1"></i>
+                Yeni Yetenek Ekle
+            </a>
+        </div>
+    </div>
+
+    <!-- Yetenek Tablosu -->
+    <div class="data-table-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h6 class="fw-semibold mb-1">Yetenek Listesi</h6>
+                <small class="text-muted">
+                    Toplam @Model.Count yetenek kategorisi bulunmaktadır.
+                </small>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table custom-admin-table align-middle">
+
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">#</th>
+                        <th>Yetenek Başlığı</th>
+                        <th>Açıklama</th>
+                        <th class="text-center">İkon</th>
+                        <th class="text-center">Teknoloji Sayısı</th>
+                        <th class="text-center">Teknolojiler</th>
+                        <th class="text-center">İşlemler</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="text-muted fw-semibold">
+                                        @item.SkillId
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="fw-semibold">
+                                        @item.Title
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="text-muted">
+                                        @(item.Description?.Length > 70
+                                            ? item.Description.Substring(0, 70) + "..."
+                                            : item.Description)
+                                    </span>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="d-inline-flex align-items-center justify-content-center"
+                                         style="width: 42px; height: 42px; background-color: #f1f3f9; border-radius: 12px;">
+                                        <i class="@item.IconUrl"
+                                           style="font-size: 22px; color: #6c63ff;"></i>
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <span class="status-pill status-active">
+                                        @(item.SkillItems?.Count ?? 0) Teknoloji
+                                    </span>
+                                </td>
+
+                                <td class="text-center">
+                                    <a href="/Admin/SkillItem/SkillItemList?skillId=@item.SkillId"
+                                       class="btn-table-util text-decoration-none">
+                                        <i class="bi bi-code-slash me-1"></i>
+                                        Teknolojileri Yönet
+                                    </a>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <a href="/Admin/Skill/UpdateSkill/@item.SkillId"
+                                           class="btn-action-icon btn-edit"
+                                           title="Düzenle">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <form action="/Admin/Skill/DeleteSkill/@item.SkillId"
+                                              method="post"
+                                              class="delete-form d-inline">
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="submit"
+                                                    class="btn-action-icon btn-delete"
+                                                    title="Sil">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+                                <i class="bi bi-lightbulb text-muted"
+                                   style="font-size: 35px;"></i>
+
+                                <p class="text-muted mt-2 mb-1">
+                                    Henüz herhangi bir yetenek eklenmemiş.
+                                </p>
+
+                                <a href="/Admin/Skill/CreateSkill"
+                                   class="btn-pastel-primary mt-2">
+                                    <i class="bi bi-plus-lg me-1"></i>
+                                    İlk Yeteneği Ekle
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>

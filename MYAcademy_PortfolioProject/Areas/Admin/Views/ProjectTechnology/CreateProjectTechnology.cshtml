@@ -1,0 +1,73 @@
+﻿@model ProjectTechnology
+
+@{
+    ViewData["Title"] = "CreateProjectTechnology";
+    Layout = "~/Areas/Admin/Views/AdminLayout/Index.cshtml";
+}
+
+<main class="page-content-area">
+
+    <div class="content-header-row">
+        <div>
+            <h1 class="page-title">Yeni Teknoloji Ekle</h1>
+            <p class="page-subtitle">
+                <strong>@ViewBag.ProjectTitle</strong> projesine yeni bir teknoloji ekleyebilirsiniz.
+            </p>
+        </div>
+    </div>
+
+    <div class="data-table-card">
+
+        <div class="table-filter-bar">
+            <div>
+                <h5 class="mb-0">Teknoloji Bilgileri</h5>
+                <small class="text-muted">
+                    Eklemek istediğiniz teknolojinin adını giriniz.
+                </small>
+            </div>
+        </div>
+
+        <div class="p-4">
+
+            <form method="post">
+
+                <input type="hidden" asp-for="ProjectId" />
+
+                <div class="row">
+
+                    <div class="col-12 mb-3">
+                        <label asp-for="TechnologyName" class="form-label">
+                            Teknoloji Adı
+                        </label>
+
+                        <input asp-for="TechnologyName"
+                               class="form-control"
+                               placeholder="Örn: ASP.NET Core, Web API, SQL Server..." />
+                    </div>
+
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end gap-2">
+
+                    <a href="/Admin/ProjectTechnology/ProjectTechnologyList?projectId=@Model.ProjectId"
+                       class="btn-table-util">
+                        <i class="bi bi-arrow-left"></i>
+                        Vazgeç
+                    </a>
+
+                    <button type="submit" class="btn-pastel-primary">
+                        <i class="bi bi-check-circle-fill"></i>
+                        Teknolojiyi Kaydet
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</main>
